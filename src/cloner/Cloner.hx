@@ -38,7 +38,7 @@ class Cloner {
             return v;
         #end
         
-        #if(neko || flash)
+        #if(neko || flash || js)
         try {
         if(Type.getClassName(cast v) != null)
             return v;
