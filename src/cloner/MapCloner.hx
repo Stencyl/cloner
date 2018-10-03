@@ -1,7 +1,7 @@
 package cloner;
 import cloner.Cloner;
 import Type.ValueType;
-import Map.IMap;
+#if (haxe<4) import Map.IMap; #else import haxe.Constraints.IMap; #end
 class MapCloner<K>{
 
     var cloner:Cloner;
