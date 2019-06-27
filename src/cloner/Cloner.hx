@@ -10,7 +10,10 @@ class Cloner {
     var classHandles:Map<String,Dynamic->Dynamic>;
     var stringMapCloner:MapCloner<String>;
     var intMapCloner:MapCloner<Int>;
-
+    #if debug
+    var depth:Int;
+    #end
+    
     public function new():Void {
         stringMapCloner = new MapCloner(this,StringMap);
         intMapCloner = new MapCloner(this,IntMap);
@@ -27,12 +30,33 @@ class Cloner {
 
     public function clone <T> (v:T):T {
         cache = new ObjectMap<Dynamic,Dynamic>();
+        #if debug
+        depth = 0;
+        #end
         var outcome:T = _clone(v);
         cache = null;
         return outcome;
     }
+    
+    #if debug
+    public inline function _clone <T> (v:T):T {
+        ++depth;
+        var toReturn = __clone(v);
+        --depth;
+        return toReturn;
+    }
+    #end
 
+    #if debug
+    public function __clone <T> (v:T):T {
+    #else
     public function _clone <T> (v:T):T {
+    #end
+        #if debug
+        if(depth > 30) {
+            throw "deep clone";
+        }
+        #end
         #if js
         if(Std.is(v, String))
             return v;
